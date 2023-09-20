@@ -1,4 +1,4 @@
-// Светодиоды подключенные к пинам D0, D1, D2 загораются по очереди. Смена очереди происходит при нажатии на кнопку подключенную к пину D3 (Модель светофора)
+// Реализовать задание из пункта №3, но с использованием аппаратного прерывания при нажатии на кнопку вместо использования функции digitalRead;
 const int ledPins[] = {D0, D1, D2};
 const int buttonPin = D3;
 int currentLED = 0;
@@ -8,13 +8,15 @@ void setup() {
     pinMode(ledPins[i], OUTPUT);
   }
   pinMode(buttonPin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(buttonPin), handleButtonPress, FALLING);
 }
 
 void loop() {
-  if (digitalRead(buttonPin) == LOW) {
-    digitalWrite(ledPins[currentLED], LOW);
-    currentLED = (currentLED + 1) % 3;
-    digitalWrite(ledPins[currentLED], HIGH);
-    delay(200);
-  }
+  // Пустой цикл, светодиоды управляются через прерывание
+}
+
+void handleButtonPress() {
+  digitalWrite(ledPins[currentLED], LOW);
+  currentLED = (currentLED + 1) % 3;
+  digitalWrite(ledPins[currentLED], HIGH);
 }
