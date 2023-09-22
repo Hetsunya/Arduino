@@ -1,23 +1,22 @@
 // Реализовать задание из пункта №3, но с использованием встроенного аппаратного таймера вместо нажатия на кнопку;
-int ledPins[] = {0, 1, 2}; // Пины для светодиодов
-int currentLed = 0; // Текущий светодиод
+const int ledPins[] = {D0, D1, D2};
+int currentLED = 0;
+unsigned long previousMillis = 0;
+const long interval = 200;  // Интервал между сменой светодиода (200 миллисекунд)
 
 void setup() {
   for (int i = 0; i < 3; i++) {
     pinMode(ledPins[i], OUTPUT);
   }
-  // Используем таймер 2 для периодического вызова функции changeLed
-  Timer2.attachInterrupt(changeLed);
-  Timer2.initialize(5000000); // Интервал в микросекундах (5 секунд)
-  Timer2.start();
 }
 
 void loop() {
-  // Здесь нет необходимости в бесконечном цикле
-}
+  unsigned long currentMillis = millis();
 
-void changeLed() {
-  digitalWrite(ledPins[currentLed], LOW);
-  currentLed = (currentLed + 1) % 3;
-  digitalWrite(ledPins[currentLed], HIGH);
+  if (currentMillis - previousMillis >= interval) {
+    digitalWrite(ledPins[currentLED], LOW);
+    currentLED = (currentLED + 1) % 3;
+    digitalWrite(ledPins[currentLED], HIGH);
+    previousMillis = currentMillis;
+  }
 }
